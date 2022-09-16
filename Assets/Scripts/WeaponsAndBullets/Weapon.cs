@@ -3,13 +3,19 @@ using System.Collections.Generic;
 using Unity.Mathematics;
 using UnityEngine;
 
-public abstract class Weapon : MonoBehaviour
+public  class Weapon : MonoBehaviour
 {
     [SerializeField]private WeaponStats weaponStats;
-    [SerializeField] private GameObject scope;
+    [SerializeField] private Transform bulletPosition;
+
+    public Transform BulletPosition => bulletPosition;
+    public WeaponStats WeaponStats => weaponStats; 
     
-    public virtual void Fire(Vector3 vector3)
+    
+    
+    public  void Fire()
     {
-        Instantiate(weaponStats.Bullet, vector3, quaternion.identity);
+        Instantiate(weaponStats.Bullet, bulletPosition.position, transform.rotation);
+
     }
 }

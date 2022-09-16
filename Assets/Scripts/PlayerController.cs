@@ -67,7 +67,6 @@ public class PlayerController : MonoBehaviour
             y * deltaTime * _currentSpeed,
             0
         );
-
         //_rb.AddForce(new Vector2(x,y)*_maxSpeed);
     }
     private void Move(Vector2 moveVector)
@@ -188,7 +187,6 @@ public class PlayerController : MonoBehaviour
         {
             Jump();
         }
-        Debug.Log(_gravityVectorsCount);
         Move(_moveVector);
     }
 

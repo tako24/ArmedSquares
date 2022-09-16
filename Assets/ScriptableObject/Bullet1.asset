@@ -9,9 +9,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9d42b9cb6eb8645429d39174f8221a2a, type: 3}
-  m_Name: Weapon1
+  m_Script: {fileID: 11500000, guid: 722c3322bc4db3a489873751ca1f5e8f, type: 3}
+  m_Name: Bullet1
   m_EditorClassIdentifier: 
+  damage: 5
+  speed: 10
   icon: {fileID: 0}
-  bullet: {fileID: 7480588684295855874, guid: 35a47ed7422ee8d409b261a92cb02b8e, type: 3}
-  shotCooldown: 0.5
