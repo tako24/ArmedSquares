@@ -10,7 +10,7 @@ public  class Bullet : MonoBehaviour
     [SerializeField] private BulletStats bulletStats;
     [SerializeField] private Rigidbody rb;
     [SerializeField] private LayerMask layerMask;
-    private float _distance = 0.05f;
+    private float _distance = 0.5f;
     private void Start()
     {
         
@@ -23,17 +23,15 @@ public  class Bullet : MonoBehaviour
         {
             if (hitInfo.collider.CompareTag("Enemy"))
             {
-                hitInfo.collider.GetComponent<HealthComponent>().TakeDamage(gameObject,bulletStats.Damage);
-                Debug.Log(hitInfo.collider.GetComponent<HealthComponent>().GetCurrentHP);
+                var enemyHealth = hitInfo.collider.GetComponent<HealthComponent>();
+                enemyHealth.TakeDamage(gameObject,bulletStats.Damage);
+                Debug.Log(enemyHealth.GetCurrentHP);
             }
             Destroy(gameObject);   
         }
         transform.Translate(Vector2.right * (bulletStats.Speed * Time.deltaTime));
     }
-
-    private void OnCollisionEnter2D(Collision2D col)
-    {
-    }
+    
 
     public virtual void OnHit(Collision2D col)
     {

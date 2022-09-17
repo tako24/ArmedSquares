@@ -22,9 +22,15 @@ public class WeaponManager : MonoBehaviour
 
     public void ChangeWeapon()
     {
+        var oldWeapon = _currentWeapon;
+        _currentWeapon.gameObject.SetActive(false);
         _currentWeaponIndex = (_currentWeaponIndex + 1) % weapons.Count;
         _currentWeapon = weapons[_currentWeaponIndex];
+        _currentWeapon.transform.rotation = oldWeapon.transform.rotation;
+        _currentWeapon.gameObject.SetActive(true);
+        _timeBtwShot = 0; //исправить
     }
+    
     public void Fire()
     {
         _currentWeapon.Fire();

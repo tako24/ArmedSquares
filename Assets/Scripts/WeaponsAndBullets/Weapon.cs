@@ -5,15 +5,15 @@ using UnityEngine;
 
 public  class Weapon : MonoBehaviour
 {
-    [SerializeField]private WeaponStats weaponStats;
-    [SerializeField] private Transform bulletPosition;
+    [SerializeField]private protected WeaponStats weaponStats;
+    [SerializeField] private protected Transform bulletPosition;
 
     public Transform BulletPosition => bulletPosition;
     public WeaponStats WeaponStats => weaponStats; 
     
     
     
-    public  void Fire()
+    public virtual void Fire()
     {
         Instantiate(weaponStats.Bullet, bulletPosition.position, transform.rotation);
 
