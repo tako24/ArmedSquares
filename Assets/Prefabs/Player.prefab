@@ -178,7 +178,7 @@ MonoBehaviour:
     callback:
       m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 2486279387231411621}
+        - m_Target: {fileID: 0}
           m_TargetAssemblyTypeName: PlayerController, Assembly-CSharp
           m_MethodName: Jump
           m_Mode: 1
@@ -284,9 +284,9 @@ MonoBehaviour:
     callback:
       m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 2486279387231411621}
+        - m_Target: {fileID: 0}
           m_TargetAssemblyTypeName: PlayerController, Assembly-CSharp
-          m_MethodName: ResetMoveMoveUpDown
+          m_MethodName: ResetSpeedAndMoveVector
           m_Mode: 1
           m_Arguments:
             m_ObjectArgument: {fileID: 0}
@@ -300,7 +300,7 @@ MonoBehaviour:
     callback:
       m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 2486279387231411621}
+        - m_Target: {fileID: 0}
           m_TargetAssemblyTypeName: PlayerController, Assembly-CSharp
           m_MethodName: MoveUp
           m_Mode: 1
@@ -511,9 +511,9 @@ MonoBehaviour:
     callback:
       m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 2486279387231411621}
+        - m_Target: {fileID: 0}
           m_TargetAssemblyTypeName: PlayerController, Assembly-CSharp
-          m_MethodName: ResetMoveMoveRightLeft
+          m_MethodName: ResetSpeedAndMoveVector
           m_Mode: 1
           m_Arguments:
             m_ObjectArgument: {fileID: 0}
@@ -527,7 +527,7 @@ MonoBehaviour:
     callback:
       m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 2486279387231411621}
+        - m_Target: {fileID: 0}
           m_TargetAssemblyTypeName: PlayerController, Assembly-CSharp
           m_MethodName: MoveLeft
           m_Mode: 1
@@ -633,9 +633,9 @@ MonoBehaviour:
     callback:
       m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 2486279387231411621}
+        - m_Target: {fileID: 0}
           m_TargetAssemblyTypeName: PlayerController, Assembly-CSharp
-          m_MethodName: ResetMoveMoveUpDown
+          m_MethodName: ResetSpeedAndMoveVector
           m_Mode: 1
           m_Arguments:
             m_ObjectArgument: {fileID: 0}
@@ -649,7 +649,7 @@ MonoBehaviour:
     callback:
       m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 2486279387231411621}
+        - m_Target: {fileID: 0}
           m_TargetAssemblyTypeName: PlayerController, Assembly-CSharp
           m_MethodName: MoveDown
           m_Mode: 1
@@ -755,9 +755,9 @@ MonoBehaviour:
     callback:
       m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 2486279387231411621}
+        - m_Target: {fileID: 0}
           m_TargetAssemblyTypeName: PlayerController, Assembly-CSharp
-          m_MethodName: ResetMoveMoveRightLeft
+          m_MethodName: ResetSpeedAndMoveVector
           m_Mode: 1
           m_Arguments:
             m_ObjectArgument: {fileID: 0}
@@ -771,7 +771,7 @@ MonoBehaviour:
     callback:
       m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 2486279387231411621}
+        - m_Target: {fileID: 0}
           m_TargetAssemblyTypeName: PlayerController, Assembly-CSharp
           m_MethodName: MoveRight
           m_Mode: 1
@@ -794,12 +794,13 @@ GameObject:
   - component: {fileID: 9032296390873428133}
   - component: {fileID: 6334859588989527763}
   - component: {fileID: 4642366633074461981}
-  - component: {fileID: 2486279387231411621}
   - component: {fileID: 6054716421676881551}
   - component: {fileID: 5250132774341837132}
   - component: {fileID: 7392935765144815975}
   - component: {fileID: 2913816530897260699}
   - component: {fileID: 494101962957913739}
+  - component: {fileID: 2137301898656342645}
+  - component: {fileID: 5737739833546269480}
   m_Layer: 2
   m_Name: Player
   m_TagString: Untagged
@@ -897,23 +898,6 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 4
---- !u!114 &2486279387231411621
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7891358967871598245}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7079f4130198c474c948f61d1d358b47, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  syncMode: 0
-  syncInterval: 0.1
-  maxSpeed: 6
-  gravityScale: 8
-  jumpForce: 7
 --- !u!61 &6054716421676881551
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -1020,3 +1004,31 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   syncMode: 0
   syncInterval: 0.1
+--- !u!114 &2137301898656342645
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7891358967871598245}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 57b132d0f81f647499798c306bb31c72, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  minGroundNormalY: 0.65
+  gravityModifier: 1
+  maxSpeed: 7
+  jumpTakeOffSpeed: 7
+--- !u!114 &5737739833546269480
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7891358967871598245}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1fe23cee3ebca0142ac4dffb4f18560b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

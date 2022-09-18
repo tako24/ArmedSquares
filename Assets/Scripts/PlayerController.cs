@@ -1,22 +1,21 @@
 using Mirror;
-using System.Collections.Generic;
-using Unity.Mathematics;
+using Unity.VisualScripting;
 using UnityEngine;
-using static UnityEngine.RuleTile.TilingRuleOutput;
 
 public class PlayerController : NetworkBehaviour
 {
+    BoxCollider2D _collider;
     private Rigidbody2D _rb;
-    private Vector2 _gravityVector;
-    private Vector2 _moveVector;
-    private bool _isGrounded;
-    private int _currentSpeed;
     private int _gravityVectorsCount;
-    private List<Ray2D> _rays;
+    private Vector2[] _gravityVectors = new Vector2[4];
+    private Vector2 _moveVector;
+    private int _currentSpeed;
+    private RaycastHit2D[] _rayCasts = new RaycastHit2D[8];
 
     [SerializeField] private int maxSpeed;
     [SerializeField] private int gravityScale;
     [SerializeField] private int jumpForce;
+    [SerializeField] private float _raycastDistance = 0.1f;
 
     // Client input
     private bool _isJump = false;
@@ -29,8 +28,10 @@ public class PlayerController : NetworkBehaviour
 
     void Start()
     {
+        if (isServer == false) return;
+        _collider = GetComponent<BoxCollider2D>();
         _rb = GetComponent<Rigidbody2D>();
-        _gravityVector = -transform.up;
+        _gravityVectors[0] = -transform.up;
     }
 
     [Command]
@@ -40,21 +41,20 @@ public class PlayerController : NetworkBehaviour
         moveY = Mathf.Clamp(moveY, -1, 1);
         scopeX = Mathf.Clamp(scopeX, -1, 1);
         scopeY = Mathf.Clamp(scopeY, -1, 1);
-
         if (jump)
         {
             JumpServer();
         }
-
-        if (moveX == 0 || moveY == 0)
+        else
         {
             ResetSpeedAndMoveVector();
         }
+
         if (moveX != 0)
         {
             MoveRightLeftServer(moveX);
         }
-        else if (moveY != 0)
+        if (moveY != 0)
         {
             MoveUpDownServer(moveY);
         }
@@ -63,38 +63,73 @@ public class PlayerController : NetworkBehaviour
 
     private void ChangeGravityVector()
     {
-        _isGrounded = false;
-        
-        _rays = new List<Ray2D>{
-            new Ray2D(transform.localPosition, transform.up),
-            new Ray2D(transform.localPosition, -transform.up),
-            new Ray2D(transform.localPosition, transform.right),
-            new Ray2D(transform.localPosition, -transform.right)
-        };
-
         _gravityVectorsCount = 0;
-        RaycastHit2D hit;
-        for (int i = 0; i < _rays.Count; ++i)
+        var half = 0.45f;
+        var m1 = 0.95f;
+        _rayCasts[0] = Physics2D.Raycast(_collider.bounds.center + (transform.up + transform.right * m1) * half, transform.up, _raycastDistance);
+        _rayCasts[1] = Physics2D.Raycast(_collider.bounds.center + (transform.up - transform.right * m1) * half, transform.up, _raycastDistance);
+        _rayCasts[2] = Physics2D.Raycast(_collider.bounds.center - (transform.up + transform.right * m1) * half, -transform.up, _raycastDistance);
+        _rayCasts[3] = Physics2D.Raycast(_collider.bounds.center - (transform.up - transform.right * m1) * half, -transform.up, _raycastDistance);
+        _rayCasts[4] = Physics2D.Raycast(_collider.bounds.center + (transform.right + transform.up * m1) * half, transform.right, _raycastDistance);
+        _rayCasts[5] = Physics2D.Raycast(_collider.bounds.center + (transform.right - transform.up * m1) * half, transform.right, _raycastDistance);
+        _rayCasts[6] = Physics2D.Raycast(_collider.bounds.center - (transform.right + transform.up * m1) * half, -transform.right, _raycastDistance);
+        _rayCasts[7] = Physics2D.Raycast(_collider.bounds.center - (transform.right - transform.up * m1) * half, -transform.right, _raycastDistance);
+        Debug.DrawRay(_collider.bounds.center + (transform.up + transform.right * m1) * half, transform.up * _raycastDistance, Color.red);
+        Debug.DrawRay(_collider.bounds.center + (transform.up - transform.right * m1) * half, transform.up * _raycastDistance, Color.red);
+        Debug.DrawRay(_collider.bounds.center - (transform.up + transform.right * m1) * half, -transform.up * _raycastDistance, Color.green);
+        Debug.DrawRay(_collider.bounds.center - (transform.up - transform.right * m1) * half, -transform.up * _raycastDistance, Color.green);
+        Debug.DrawRay(_collider.bounds.center + (transform.right + transform.up * m1) * half, transform.right * _raycastDistance, Color.blue);
+        Debug.DrawRay(_collider.bounds.center + (transform.right - transform.up * m1) * half, transform.right * _raycastDistance, Color.blue);
+        Debug.DrawRay(_collider.bounds.center - (transform.right + transform.up * m1) * half, -transform.right * _raycastDistance, Color.magenta);
+        Debug.DrawRay(_collider.bounds.center - (transform.right - transform.up * m1) * half, -transform.right * _raycastDistance, Color.magenta);
+
+        for (int gravityIndex = 0, i = 0; i < _rayCasts.Length; i += 2, ++gravityIndex)
         {
-            hit = Physics2D.Raycast(_rays[i].origin, _rays[i].direction, 0.55f);
-            if (hit)
+            if (_rayCasts[i] || _rayCasts[i + 1])
             {
-                _gravityVectorsCount++;
-                _gravityVector = _rays[i].direction;
-                if (_gravityVectorsCount > 1)
-                    ResetSpeedAndMoveVector();
-                _isGrounded = true;
+                //if (_gravityVectorsCount == 0)
+                if (_rayCasts[i].normal.x != 0 || _rayCasts[i].normal.y != 0)
+                    _gravityVectors[gravityIndex] = -_rayCasts[i].normal;
+                else
+                    _gravityVectors[gravityIndex] = -_rayCasts[i + 1].normal;
+                ++_gravityVectorsCount;
             }
+        }
+
+        {
+            Debug.Log("up    " + ((bool)_rayCasts[0] || (bool)_rayCasts[1]).ToString());
+            Debug.Log("down  " + ((bool)_rayCasts[2] || (bool)_rayCasts[3]).ToString());
+            Debug.Log("right " + ((bool)_rayCasts[4] || (bool)_rayCasts[5]).ToString());
+            Debug.Log("left  " + ((bool)_rayCasts[6] || (bool)_rayCasts[7]).ToString());
+            Debug.Log("gravity count " + _gravityVectorsCount.ToString());
+            for(int i = 0; i < _gravityVectorsCount; ++i)
+                Debug.Log("gravity " + i.ToString() + " " + _gravityVectors[i].ToString());
         }
     }
 
-    private void Move(Vector2 moveVector)
+    private bool HasGravity(Vector2 gravity)
     {
-        if (_gravityVector.Equals(moveVector))
-            return;
+        for (int i = 0; i < _gravityVectorsCount; ++i)
+            if (_gravityVectors[i] == gravity)
+                return true;
+        return false;
+    }
+
+    private void Move()
+    {
+        //if (_gravityVector == _moveVector) return;
+        if(HasGravity(_moveVector)) return;
         var deltaTime = Time.deltaTime;
-        _rb.AddForce(moveVector * _currentSpeed);
-        Debug.DrawRay(transform.localPosition, moveVector * _currentSpeed, Color.red);
+        transform.position += new Vector3(
+            _moveVector.x * deltaTime * _currentSpeed,
+            _moveVector.y * deltaTime * _currentSpeed,
+            0
+        );
+
+        //Vector3 targetVelocity = new Vector2(_moveVector.x * _currentSpeed + _rb.velocity.x, _moveVector.y * _currentSpeed + _rb.velocity.y);
+        //var m_Velocity = Vector2.zero;
+        //var m_MovementSmoothing = Time.deltaTime;
+        //_rb.velocity = Vector2.SmoothDamp(_rb.velocity, targetVelocity, ref m_Velocity, m_MovementSmoothing);
     }
 
     [Client]
@@ -106,115 +141,58 @@ public class PlayerController : NetworkBehaviour
     [Server]
     private void JumpServer()
     {
-        if (_gravityVectorsCount > 1)
-            return;
-
-        if (_isGrounded)
-        {
-            _isGrounded = false;
-            _rb.AddForce((-_gravityVector) * jumpForce, ForceMode2D.Impulse);
-        }
+        if (_gravityVectorsCount != 1) return;
+        _rb.AddForce(-_gravityVectors[0] * jumpForce, ForceMode2D.Impulse);
     }
 
     [Server]
-    private void MoveRightLeftServer(int multiplier)
-    {
-        if (_gravityVectorsCount > 1)
-        {
-            if (!_gravityVector.Equals(multiplier * transform.right))
-            {
-                _currentSpeed = maxSpeed;
-                _moveVector = multiplier * transform.right;
-            }
-            return;
-        }
-        if (!_gravityVector.Equals(multiplier * transform.right) && !(-_gravityVector).Equals(multiplier * transform.right))
-        {
-            _currentSpeed = maxSpeed;
-            _moveVector = multiplier * transform.right;
-        }
-    }
+    private void MoveRightLeftServer(int multiplier) => ChangeMoveVector(multiplier * transform.right);
 
     [Client]
-    public void MoveRight()
-    {
-        _moveRight = 1;
-    }
+    public void MoveRight() => _moveRight = 1;
 
     [Client]
-    public void MoveLeft()
-    {
-        _moveRight = -1;
-    }
+    public void MoveLeft() => _moveRight = -1;
 
     [Client]
-    public void ResetMoveMoveRightLeft()
-    {
-        _moveRight = 0;
-    }
+    public void ResetMoveMoveRightLeft() => _moveRight = 0;
 
     [Server]
-    private void MoveUpDownServer(int multiplier)
+    private void MoveUpDownServer(int multiplier) => ChangeMoveVector(multiplier * transform.up);
+
+    [Server]
+    private void ChangeMoveVector(Vector2 direction)
     {
-        if (_gravityVectorsCount > 1)
-        {
-            if (!_gravityVector.Equals(multiplier * transform.up))
-            {
-                _currentSpeed = maxSpeed;
-                _moveVector = multiplier * transform.up;
-            }
-            return;
-        }
-        if (!_gravityVector.Equals(multiplier * transform.up) && !(-_gravityVector).Equals(multiplier * transform.up))
+        if (_gravityVectorsCount > 1 || _gravityVectors[0].Abs() != direction.Abs())
         {
             _currentSpeed = maxSpeed;
-            _moveVector = multiplier * transform.up;
+            _moveVector = direction;
         }
     }
 
     [Client]
-    public void MoveUp()
-    {
-        _moveUp = 1;
-    }
+    public void MoveUp() => _moveUp = 1;
 
     [Client]
-    public void MoveDown()
-    {
-        _moveUp = -1;
-    }
+    public void MoveDown() => _moveUp = -1;
 
     [Client]
-    public void ResetMoveMoveUpDown()
-    {
-        _moveUp = 0;
-    }
+    public void ResetMoveMoveUpDown() => _moveUp = 0;
 
     public void ResetSpeedAndMoveVector()
     {
+        if (_gravityVectorsCount != 0)
+            _rb.velocity = new Vector2(0, 0);
         _currentSpeed = 0;
         _moveVector = Vector2.zero;
     }
 
     private void LateUpdate()
     {
-        var currentVelocity = _rb.velocity;
-        var constantSpeed = 2;
-        var smoothingFactor = 1;
-        var tvel = currentVelocity.normalized * constantSpeed;
-        _rb.velocity = Vector2.Lerp(currentVelocity, tvel, Time.deltaTime * smoothingFactor);
+        _rb.velocity = _rb.velocity.normalized * maxSpeed;
     }
 
     private void Update()
-    {
-        if (isServer)
-        {
-            Debug.Log(_gravityVectorsCount);
-            Move(_moveVector);
-        }
-    }
-
-    private void FixedUpdate()
     {
         if (isLocalPlayer)
         {
@@ -230,12 +208,16 @@ public class PlayerController : NetworkBehaviour
                 _lastMoveUp = _moveUp;
             }
         }
+    }
 
+    private void FixedUpdate()
+    {
         if (isServer)
         {
             ChangeGravityVector();
-            Debug.DrawRay(transform.localPosition, _gravityVector, Color.blue);
-            _rb.AddForce(_gravityVector * gravityScale);
+            Move();
+            _rb.AddForce(_gravityVectors[0] * gravityScale);
         }
     }
 }
+
