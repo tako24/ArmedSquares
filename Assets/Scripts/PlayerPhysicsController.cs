@@ -37,27 +37,15 @@ public class PlayerPhysicsController : PhysicsObject
             gravity.y * -Input.GetAxis("Horizontal"),
             gravity.x * Input.GetAxis("Vertical"));
         move.Normalize();
-        bool isMoveUpDown = gravity.x == 0;
         float jumpSign = isMoveUpDown ? Mathf.Sign(-gravity.y) : Mathf.Sign(-gravity.x);
-        if (Input.GetButtonDown("Jump"))
+        if (Input.GetButtonDown("Jump") && isGrounded)
         {
-            if (isGrounded)
-            {
-                if (isMoveUpDown)
-                    velocity.y = jumpTakeOffSpeed * jumpSign;
-                else
-                    velocity.x = jumpTakeOffSpeed * jumpSign;
-            }
-            //if(isMoveUpDown)
-            //{
-            //    if (velocity.y > 0)
-            //        velocity.y *= 0.5f * jumpSign;
-            //}
-            //else if (velocity.x > 0)
-            //{
-            //    velocity.x *= 0.5f * jumpSign;
-            //}
+            if (isMoveUpDown)
+                velocity.y = jumpTakeOffSpeed * jumpSign;
+            else
+                velocity.x = jumpTakeOffSpeed * jumpSign;
         }
+        
         
         //bool flipSprite = (spriteRenderer.flipX ? (move.x > 0.01f) : (move.x < 0.01f));
         //if (flipSprite)
