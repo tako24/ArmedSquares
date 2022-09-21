@@ -1,5 +1,4 @@
 using Mirror;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class PlayerController : NetworkBehaviour
@@ -163,7 +162,7 @@ public class PlayerController : NetworkBehaviour
     [Server]
     private void ChangeMoveVector(Vector2 direction)
     {
-        if (_gravityVectorsCount > 1 || _gravityVectors[0].Abs() != direction.Abs())
+        //if (_gravityVectorsCount > 1 || _gravityVectors[0].Abs() != direction.Abs())
         {
             _currentSpeed = maxSpeed;
             _moveVector = direction;
