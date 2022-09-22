@@ -1,5 +1,7 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
+
 
 public class PlayerController : MonoBehaviour
 {
@@ -8,10 +10,10 @@ public class PlayerController : MonoBehaviour
     private Vector2 _moveVector;
     private bool _isGrounded;
     private int _currentSpeed;
-    private int _gravityVectorsCount;
-    
-    
+
+
     private List<Ray2D> _rays;
+    private List<Vector2> _gravityVectors;
 
 
     [SerializeField]
@@ -26,7 +28,7 @@ public class PlayerController : MonoBehaviour
     {
         _rb = GetComponent<Rigidbody2D>();
         _gravityVector = -transform.up;
-        
+        _gravityVectors = new List<Vector2>();
     }
     private void ChangeGravityVector()
     {
@@ -38,9 +40,8 @@ public class PlayerController : MonoBehaviour
             new Ray2D(transform.localPosition, transform.right),
             new Ray2D(transform.localPosition, -transform.right)
         };
-        
-        _gravityVectorsCount = 0;
-        
+        _gravityVectors.Clear();
+
         RaycastHit2D hit ;
         
         for (int i = 0; i < _rays.Count; ++i)
@@ -49,9 +50,9 @@ public class PlayerController : MonoBehaviour
             if(hit)
             {
                 
-                _gravityVectorsCount++;
                 _gravityVector = _rays[i].direction;
-                if (_gravityVectorsCount>1)
+                _gravityVectors.Add(_rays[i].direction);
+                if (_gravityVectors.Count>1)
                     ResetSpeedAndMoveVector();
                 _isGrounded = true;
                // Debug.DrawRay(_rays[i].origin, _gravityVector , Color.blue);
@@ -87,7 +88,7 @@ public class PlayerController : MonoBehaviour
 
     public void Jump()
     {
-        if (_gravityVectorsCount >1)
+        if (_gravityVectors.Count >1)
             return;
         
         if (_isGrounded)
@@ -99,80 +100,74 @@ public class PlayerController : MonoBehaviour
 
     public void MoveRight()
     {
-        if (_gravityVectorsCount>1)
+        if(_gravityVectors.Count>1)
         {
-            if (!_gravityVector.Equals(transform.right))
+            foreach (var gravityVector in _gravityVectors)
             {
-                _currentSpeed = maxSpeed;
-                _moveVector = transform.right;
+                if (gravityVector.Equals(transform.right))
+                    return;
             }
-            return;
-        }
-        if (!_gravityVector.Equals(transform.right) && !(-_gravityVector).Equals(transform.right) )
-        {
             _currentSpeed = maxSpeed;
             _moveVector = transform.right;
         }
-
+        
+        if (_gravityVector.Equals(transform.right) || (-_gravityVector).Equals(transform.right) || !_isGrounded) return;
+        _currentSpeed = maxSpeed;
+        _moveVector = transform.right;
     }
     
     public void MoveLeft()
     {
-
-        if (_gravityVectorsCount>1)
+        if(_gravityVectors.Count>1)
         {
-            if (!_gravityVector.Equals(-transform.right))
+            foreach (var gravityVector in _gravityVectors)
             {
-                _currentSpeed = maxSpeed;
-                _moveVector = -transform.right;
+                if (gravityVector.Equals(-transform.right))
+                    return;
             }
-            return;
-        }
-        if (!_gravityVector.Equals(-transform.right)&& !(-_gravityVector).Equals(-transform.right) )
-        {
             _currentSpeed = maxSpeed;
             _moveVector = -transform.right;
         }
+        
+        if (_gravityVector.Equals(-transform.right) || (-_gravityVector).Equals(-transform.right) || !_isGrounded) return;
+        _currentSpeed = maxSpeed;
+        _moveVector = -transform.right;
     }
     
     public void MoveUp()
     {
-
-        if (_gravityVectorsCount>1)
+        if(_gravityVectors.Count>1)
         {
-            if (!_gravityVector.Equals(transform.up))
+            foreach (var gravityVector in _gravityVectors)
             {
-                _currentSpeed = maxSpeed;
-                _moveVector = transform.up;
+                if (gravityVector.Equals(transform.up))
+                    return;
             }
-            return;
-        }
-        
-        if (!_gravityVector.Equals(transform.up)&& !(-_gravityVector).Equals(transform.up) )
-        {
             _currentSpeed = maxSpeed;
             _moveVector = transform.up;
         }
+        
+        if (_gravityVector.Equals(transform.up) || (-_gravityVector).Equals(transform.up) || !_isGrounded) return;
+        _currentSpeed = maxSpeed;
+        _moveVector = transform.up;
     }
     
     public void MoveDown()
     {
-        
-        if (_gravityVectorsCount>1)
+        if(_gravityVectors.Count>1)
         {
-            if (!_gravityVector.Equals(-transform.up))
+            foreach (var gravityVector in _gravityVectors)
             {
-                _currentSpeed = maxSpeed;
-                _moveVector = -transform.up;
+                if (gravityVector.Equals(-transform.up))
+                    return;
             }
-            return;
-        }
-        
-        if (!_gravityVector.Equals(-transform.up)&& !(-_gravityVector).Equals(-transform.up) )
-        {
             _currentSpeed = maxSpeed;
             _moveVector = -transform.up;
         }
+        
+        if (_gravityVector.Equals(-transform.up) || (-_gravityVector).Equals(-transform.up) || !_isGrounded) return;
+        _currentSpeed = maxSpeed;
+        _moveVector = -transform.up;
     }
     
     public void ResetSpeedAndMoveVector()
