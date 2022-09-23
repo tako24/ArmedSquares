@@ -111,7 +111,7 @@ public class PlayerController : MonoBehaviour
             _moveVector = transform.right;
         }
         
-        if (_gravityVector.Equals(transform.right) || (-_gravityVector).Equals(transform.right) || !_isGrounded) return;
+        if (_gravityVector.Equals(transform.right) || (-_gravityVector).Equals(transform.right) ) return;
         _currentSpeed = maxSpeed;
         _moveVector = transform.right;
     }
@@ -129,7 +129,7 @@ public class PlayerController : MonoBehaviour
             _moveVector = -transform.right;
         }
         
-        if (_gravityVector.Equals(-transform.right) || (-_gravityVector).Equals(-transform.right) || !_isGrounded) return;
+        if (_gravityVector.Equals(-transform.right) || (-_gravityVector).Equals(-transform.right) ) return;
         _currentSpeed = maxSpeed;
         _moveVector = -transform.right;
     }
@@ -147,7 +147,7 @@ public class PlayerController : MonoBehaviour
             _moveVector = transform.up;
         }
         
-        if (_gravityVector.Equals(transform.up) || (-_gravityVector).Equals(transform.up) || !_isGrounded) return;
+        if (_gravityVector.Equals(transform.up) || (-_gravityVector).Equals(transform.up) ) return;
         _currentSpeed = maxSpeed;
         _moveVector = transform.up;
     }
@@ -165,7 +165,7 @@ public class PlayerController : MonoBehaviour
             _moveVector = -transform.up;
         }
         
-        if (_gravityVector.Equals(-transform.up) || (-_gravityVector).Equals(-transform.up) || !_isGrounded) return;
+        if (_gravityVector.Equals(-transform.up) || (-_gravityVector).Equals(-transform.up) ) return;
         _currentSpeed = maxSpeed;
         _moveVector = -transform.up;
     }
