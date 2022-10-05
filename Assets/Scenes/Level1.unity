@@ -167,6 +167,50 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &762208039
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 762208041}
+  - component: {fileID: 762208040}
+  m_Layer: 0
+  m_Name: ScreenLog
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &762208040
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 762208039}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1fe23cee3ebca0142ac4dffb4f18560b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!4 &762208041
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 762208039}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -4.5237284, y: 0.15237907, z: 0.1176304}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 6
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1070363815
 GameObject:
   m_ObjectHideFlags: 0
@@ -240,7 +284,12 @@ MonoBehaviour:
   playerPrefab: {fileID: 7891358967871598245, guid: eefbdbdacc7312b4a8505d1acdb3b692, type: 3}
   autoCreatePlayer: 1
   playerSpawnMethod: 0
-  spawnPrefabs: []
+  spawnPrefabs:
+  - {fileID: 1617760632817605675, guid: b88cc3d38d6b669428432a6910782559, type: 3}
+  - {fileID: 4037024226983765265, guid: b9e04de10c5edf14a90b47097e9feb0e, type: 3}
+  - {fileID: 4037024226983765265, guid: f18ba97167ad21a4d9aa86e6f2eb9aea, type: 3}
+  - {fileID: 1617760632817605675, guid: 18c3b1c1b3886b94c94fe753d3555738, type: 3}
+  - {fileID: 1617760632817605675, guid: a39cd190449769145a16869fb9b69a68, type: 3}
 --- !u!4 &1070363818
 Transform:
   m_ObjectHideFlags: 0

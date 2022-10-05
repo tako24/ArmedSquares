@@ -5,7 +5,6 @@ public class PlayerPhysicsController : NetworkBehaviour
 {
     [SerializeField] private float maxSpeed = 7;
     [SerializeField] private float jumpTakeOffSpeed = 7;
-    [SerializeField] private float minGroundNormalY = 0.65f;
     [SerializeField] private float gravityModifier = 1.0f;
 
     private bool isMoveUpDown;
@@ -50,8 +49,6 @@ public class PlayerPhysicsController : NetworkBehaviour
 
     void Start()
     {
-        //if (!isServer) return;
-
         contactFilter.useTriggers = false;
         contactFilter.SetLayerMask(Physics2D.GetLayerCollisionMask(gameObject.layer));
         contactFilter.useLayerMask = true;
@@ -68,23 +65,13 @@ public class PlayerPhysicsController : NetworkBehaviour
     void Update()
     {
         if(isLocalPlayer)
-        {
-            inputHorizontal = -Input.GetAxis("Horizontal");
-            inputVertical = Input.GetAxis("Vertical");
-            inputJump = Input.GetButtonDown("Jump");
+            ClientInput();
 
-            if(inputHorizontal != oldInputHorizontal || inputVertical != oldInputVertical || inputJump != oldInputJump)
-            {
-                InputCommand(inputJump, inputHorizontal, inputVertical);
-                oldInputHorizontal = inputHorizontal;
-                oldInputVertical = inputVertical;
-                oldInputJump = inputJump;
-            }
-        }
         if (!isServer) return;
 
         ChangeGravityVector();
 
+        #region debug info
         Debug.Log("Gravity " + gravity);
         Debug.Log("TargetVelocity " + targetVelocity);
         Debug.Log("Velocity " + velocity);
@@ -95,10 +82,26 @@ public class PlayerPhysicsController : NetworkBehaviour
         Debug.Log("down  " + (_rayCasts[2] || _rayCasts[3]).ToString());
         Debug.Log("right " + (_rayCasts[4] || _rayCasts[5]).ToString());
         Debug.Log("left  " + (_rayCasts[6] || _rayCasts[7]).ToString());
+        #endregion
 
         isMoveUpDown = gravity.x == 0;
         targetVelocity = Vector2.zero;
         ComputeVelocity();
+    }
+
+    private void ClientInput()
+    {
+        inputHorizontal = -Input.GetAxis("Horizontal");
+        inputVertical = Input.GetAxis("Vertical");
+        inputJump = Input.GetButtonDown("Jump");
+
+        if (inputHorizontal != oldInputHorizontal || inputVertical != oldInputVertical || inputJump != oldInputJump)
+        {
+            InputCommand(inputJump, inputHorizontal, inputVertical);
+            oldInputHorizontal = inputHorizontal;
+            oldInputVertical = inputVertical;
+            oldInputJump = inputJump;
+        }
     }
 
     void FixedUpdate()
