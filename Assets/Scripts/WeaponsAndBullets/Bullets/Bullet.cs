@@ -27,15 +27,10 @@ public class Bullet : NetworkBehaviour
     public virtual void OnHit(Collider2D col)
     {
         //Debug.LogWarning(Time.time - time);
-        Damage(col, damage);
-        NetworkServer.Destroy(gameObject);
-    }
-
-    protected void Damage(Collider2D col, int damage)
-    {
         var healthComponent = col.GetComponent<HealthComponent>();
         if (healthComponent)
             healthComponent.TakeDamage(NetworkServer.spawned[ownerId].gameObject, damage);
+        NetworkServer.Destroy(gameObject);
     }
 
     //float time;

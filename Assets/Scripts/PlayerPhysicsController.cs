@@ -6,6 +6,7 @@ public class PlayerPhysicsController : NetworkBehaviour
     [SerializeField] private float maxSpeed = 7;
     [SerializeField] private float jumpTakeOffSpeed = 7;
     [SerializeField] private float gravityModifier = 1.0f;
+    [SerializeField] private LayerMask wallLayer;
 
     private bool isMoveUpDown;
     private Vector2 gravity;
@@ -143,14 +144,14 @@ public class PlayerPhysicsController : NetworkBehaviour
     private void ChangeGravityVector()
     {
         var half = 0.5f;
-        _rayCasts[0] = (bool)Physics2D.Raycast(_collider.bounds.center + (transform.up + transform.right) * half, transform.up, _raycastDistance);
-        _rayCasts[1] = (bool)Physics2D.Raycast(_collider.bounds.center + (transform.up - transform.right) * half, transform.up, _raycastDistance);
-        _rayCasts[2] = (bool)Physics2D.Raycast(_collider.bounds.center - (transform.up + transform.right) * half, -transform.up, _raycastDistance);
-        _rayCasts[3] = (bool)Physics2D.Raycast(_collider.bounds.center - (transform.up - transform.right) * half, -transform.up, _raycastDistance);
-        _rayCasts[4] = (bool)Physics2D.Raycast(_collider.bounds.center + (transform.right + transform.up) * half, transform.right, _raycastDistance);
-        _rayCasts[5] = (bool)Physics2D.Raycast(_collider.bounds.center + (transform.right - transform.up) * half, transform.right, _raycastDistance);
-        _rayCasts[6] = (bool)Physics2D.Raycast(_collider.bounds.center - (transform.right + transform.up) * half, -transform.right, _raycastDistance);
-        _rayCasts[7] = (bool)Physics2D.Raycast(_collider.bounds.center - (transform.right - transform.up) * half, -transform.right, _raycastDistance);
+        _rayCasts[0] = (bool)Physics2D.Raycast(_collider.bounds.center + (transform.up + transform.right) * half, transform.up, _raycastDistance, wallLayer);
+        _rayCasts[1] = (bool)Physics2D.Raycast(_collider.bounds.center + (transform.up - transform.right) * half, transform.up, _raycastDistance, wallLayer);
+        _rayCasts[2] = (bool)Physics2D.Raycast(_collider.bounds.center - (transform.up + transform.right) * half, -transform.up, _raycastDistance, wallLayer);
+        _rayCasts[3] = (bool)Physics2D.Raycast(_collider.bounds.center - (transform.up - transform.right) * half, -transform.up, _raycastDistance, wallLayer);
+        _rayCasts[4] = (bool)Physics2D.Raycast(_collider.bounds.center + (transform.right + transform.up) * half, transform.right, _raycastDistance, wallLayer);
+        _rayCasts[5] = (bool)Physics2D.Raycast(_collider.bounds.center + (transform.right - transform.up) * half, transform.right, _raycastDistance, wallLayer);
+        _rayCasts[6] = (bool)Physics2D.Raycast(_collider.bounds.center - (transform.right + transform.up) * half, -transform.right, _raycastDistance, wallLayer);
+        _rayCasts[7] = (bool)Physics2D.Raycast(_collider.bounds.center - (transform.right - transform.up) * half, -transform.right, _raycastDistance, wallLayer);
         {
             Debug.DrawRay(_collider.bounds.center + (transform.up + transform.right) * half, transform.up * _raycastDistance, Color.red);
             Debug.DrawRay(_collider.bounds.center + (transform.up - transform.right) * half, transform.up * _raycastDistance, Color.red);

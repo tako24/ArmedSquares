@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 7027201640316651882}
   - component: {fileID: 1843392752789311427}
   - component: {fileID: 8058402019430228984}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: Overheat
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -91,7 +91,7 @@ GameObject:
   - component: {fileID: 8405981845654031111}
   - component: {fileID: 5589391761621001642}
   - component: {fileID: 3627521570267356014}
-  m_Layer: 2
+  m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
   m_Icon: {fileID: 0}
@@ -176,7 +176,7 @@ GameObject:
   - component: {fileID: 6574194608273637074}
   - component: {fileID: 6574194608273637075}
   - component: {fileID: 6574194608273637072}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: Jump
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -282,7 +282,7 @@ GameObject:
   - component: {fileID: 6574194608434239550}
   - component: {fileID: 6574194608434239551}
   - component: {fileID: 6574194608434239548}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: MoveUp
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -404,7 +404,7 @@ GameObject:
   - component: {fileID: 6574194608596704541}
   - component: {fileID: 6574194608596704538}
   - component: {fileID: 6574194608596704539}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: Canvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -511,7 +511,7 @@ GameObject:
   - component: {fileID: 6574194608986982839}
   - component: {fileID: 6574194608986982836}
   - component: {fileID: 6574194608986982837}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: MoveLeft
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -633,7 +633,7 @@ GameObject:
   - component: {fileID: 6574194609345312485}
   - component: {fileID: 6574194609345312482}
   - component: {fileID: 6574194609345312483}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: MoveDown
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -755,7 +755,7 @@ GameObject:
   - component: {fileID: 6574194609609025872}
   - component: {fileID: 6574194609609025873}
   - component: {fileID: 6574194609609025886}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: MoveRight
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -876,7 +876,7 @@ GameObject:
   - component: {fileID: 7426829620320130223}
   - component: {fileID: 8357716328776697049}
   - component: {fileID: 2520691744482906517}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: Health
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -964,7 +964,7 @@ GameObject:
   - component: {fileID: 2137301898656342645}
   - component: {fileID: -5485509847873890132}
   - component: {fileID: 8714974038901318224}
-  m_Layer: 2
+  m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1189,6 +1189,9 @@ MonoBehaviour:
   maxSpeed: 7
   jumpTakeOffSpeed: 7
   gravityModifier: 1
+  wallLayer:
+    serializedVersion: 2
+    m_Bits: 8
   _raycastDistance: 0.1
 --- !u!114 &-5485509847873890132
 MonoBehaviour:

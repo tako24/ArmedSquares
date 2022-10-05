@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 4587142202700425891}
   - component: {fileID: 408516556809942843}
   - component: {fileID: 5842624542480574371}
-  - component: {fileID: 5867339466874079990}
+  - component: {fileID: -475316100299389445}
   m_Layer: 0
   m_Name: BulletGiga
   m_TagString: Untagged
@@ -143,7 +143,7 @@ CircleCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Radius: 0.5
---- !u!114 &5867339466874079990
+--- !u!114 &-475316100299389445
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -152,7 +152,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1617760632817605675}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 92d4bd740e1c875488ac18741a23c0e1, type: 3}
+  m_Script: {fileID: 11500000, guid: c2c268260415b5242a652f570f05565b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   syncMode: 0
@@ -162,6 +162,7 @@ MonoBehaviour:
   overheat: 30
   direction: {x: 0, y: 0}
   ownerId: 0
+  radius: 3
 --- !u!1 &6333007428922267638
 GameObject:
   m_ObjectHideFlags: 0
